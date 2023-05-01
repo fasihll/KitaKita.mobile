@@ -14,7 +14,7 @@ class SliderPage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 500,
+              height: 480,
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -29,9 +29,18 @@ class SliderPage extends StatelessWidget {
                   SizedBox(
                     height: 52,
                   ),
-                  Text(
-                    title!,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
+                    child: Center(
+                      child: Text(
+                        title!,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 9,
