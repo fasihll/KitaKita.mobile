@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:kitamuda/pages/home_page.dart';
+import 'package:kitamuda/StartingPage/starting_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  //sharedPrefences(staring_page/home_page)
+  runApp(MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({ Key? key }) : super (key: key);
+class MainApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: StartingPage(),
     );
   }
 }
