@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitamuda/StartingPage/slider.dart';
 import 'package:kitamuda/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StartingPage extends StatefulWidget {
   @override
@@ -14,22 +15,22 @@ class _StartingPageState extends State<StartingPage> {
   List<Widget> _pages = [
     SliderPage(
       image: "assets/images/starting_banner.png",
-      title: "Selamat Datang Di KMI.",
+      title: "Selamat Datang Di Kita Muda Indonesia.",
+      description: "Ciptakan Kreatifitas dalam satu genggaman",
+    ),
+    SliderPage(
+      image: "assets/images/starting_banner.png",
+      title: "Selamat Datang Di Kita Muda Indonesia",
       description: "Menciptakan Sebuah Kreativitas",
     ),
     SliderPage(
       image: "assets/images/starting_banner.png",
-      title: "Selamat Datang Di KMI.",
+      title: "Selamat Datang Di Kita Muda Indonesia",
       description: "Menciptakan Sebuah Kreativitas",
     ),
     SliderPage(
       image: "assets/images/starting_banner.png",
-      title: "Selamat Datang Di KMI.",
-      description: "Menciptakan Sebuah Kreativitas",
-    ),
-    SliderPage(
-      image: "assets/images/starting_banner.png",
-      title: "Selamat Datang Di KMI.",
+      title: "Selamat Datang Di Kita Muda Indonesia",
       description: "Menciptakan Sebuah Kreativitas",
     ),
   ];
@@ -40,25 +41,44 @@ class _StartingPageState extends State<StartingPage> {
     });
   }
 
+  addSP() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('status', 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 620,
-              child: PageView.builder(
-                scrollDirection: Axis.horizontal,
-                controller: _controller,
-                itemCount: _pages.length,
-                onPageChanged: _onChange,
-                itemBuilder: (context, int index) {
-                  return _pages[index];
-                },
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 1,
+                    child: PageView.builder(
+                      scrollDirection: Axis.horizontal,
+                      controller: _controller,
+                      itemCount: _pages.length,
+                      onPageChanged: _onChange,
+                      itemBuilder: (context, int index) {
+                        return _pages[index];
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Column(
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Row(
@@ -68,7 +88,7 @@ class _StartingPageState extends State<StartingPage> {
                       duration: Duration(milliseconds: 300),
                       height: 10,
                       width: (index == _currentPage) ? 20 : 10,
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 32),
+                      margin: EdgeInsets.symmetric(vertical: 32, horizontal: 4),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: (index == _currentPage)
@@ -77,9 +97,10 @@ class _StartingPageState extends State<StartingPage> {
                     );
                   }),
                 ),
-                InkWell(
-                  onTap: (_currentPage == (_pages.length - 1)
+                ElevatedButton(
+                  onPressed: (_currentPage == (_pages.length - 1)
                       ? () {
+                          addSP();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -90,98 +111,24 @@ class _StartingPageState extends State<StartingPage> {
                               duration: Duration(milliseconds: 800),
                               curve: Curves.easeInOut);
                         }),
-                  child: Container(
-                    height: 66,
-                    width: 188,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFFFCE00),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "Mulai Jelajahi",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
+                  style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFFFCE00),
+                      minimumSize: Size(188, 66),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  child: Text(
+                    "Mulai Jelajahi",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 SizedBox(
                   height: 61,
                 )
               ],
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           PageView.builder(
-//             scrollDirection: Axis.horizontal,
-//             controller: _controller,
-//             itemCount: _pages.length,
-//             onPageChanged: _onChange,
-//             itemBuilder: (context, int index) {
-//               return _pages[index];
-//             },
-//           ),
-//           Column(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: List<Widget>.generate(_pages.length, (int index) {
-//                   return AnimatedContainer(
-//                     duration: Duration(milliseconds: 300),
-//                     height: 10,
-//                     width: (index == _currentPage) ? 20 : 10,
-//                     margin: EdgeInsets.symmetric(horizontal: 5, vertical: 32),
-//                     decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(5),
-//                         color: (index == _currentPage)
-//                             ? Color(0xFFFFCE00)
-//                             : Color(0xFFC4C4C4)),
-//                   );
-//                 }),
-//               ),
-//               InkWell(
-//                 onTap: (_currentPage == (_pages.length - 1)
-//                     ? () {
-//                         Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                                 builder: (context) => HomePage()));
-//                       }
-//                     : () {
-//                         _controller.nextPage(
-//                             duration: Duration(milliseconds: 800),
-//                             curve: Curves.easeInOut);
-//                       }),
-//                 child: Container(
-//                   height: 66,
-//                   width: 188,
-//                   alignment: Alignment.center,
-//                   decoration: BoxDecoration(
-//                       color: Color(0xFFFFCE00),
-//                       borderRadius: BorderRadius.circular(20)),
-//                   child: Text(
-//                     "Mulai Jelajahi",
-//                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 61,
-//               )
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }

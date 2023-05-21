@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kitamuda/pages/about.dart';
 import 'package:kitamuda/pages/blank.dart';
 import 'package:kitamuda/pages/promo.dart';
-import 'package:kitamuda/pages/service.dart';
+import 'package:kitamuda/pages/services.dart';
+import 'package:kitamuda/services/details/corporateCalendar.dart';
 import 'package:kitamuda/util/jasa.dart';
 
 class HomePage extends StatefulWidget {
@@ -99,21 +100,22 @@ class _HomePageState extends State<HomePage> {
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Jadikan perusahaanmu lebih baik',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                          'Pake Kita  Indonesia untuk jadikan\nperusahaan anda lebih professional, Yuk Gunakan ....'),
-                    ],
+                  Text(
+                    'Jadikan perusahaanmu lebih baik',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Pakai Kita Muda Indonesia untuk jadikan perusahaan anda lebih professional, Yuk Gunakan ....',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -180,28 +182,35 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Blank()));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Corporate Calendar',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  CorporateCalendar()));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Corporate Calendar',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Jadikan Perusahaanmu Lebih Terjadwal',
-                            style: GoogleFonts.poppins(fontSize: 11),
-                          ),
-                        ],
+                            Text(
+                              'Jadikan Perusahaanmu Lebih Terjadwal',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(fontSize: 11),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -230,28 +239,34 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Blank()));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Corporate Merchandise',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Blank()));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Corporate Merchandise',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Jadikan Perusahaanmu lebih menarik',
-                            style: GoogleFonts.poppins(fontSize: 11),
-                          ),
-                        ],
+                            Text(
+                              'Jadikan Perusahaanmu lebih menarik',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(fontSize: 11),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -293,6 +308,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               'Corporate Identity',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -300,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Jadikan Perusahaanmu memiliki identitas tersendiri',
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(fontSize: 11),
                             ),
@@ -334,28 +351,36 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Blank()));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'More Service',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Services()));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'More Service',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Klik untuk melihat semua jasa yang kami berikan',
-                            style: GoogleFonts.poppins(fontSize: 11),
-                          ),
-                        ],
+                            Text(
+                              'Klik untuk melihat semua jasa yang kami berikan',
+                              style: GoogleFonts.poppins(fontSize: 11),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -398,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Service()),
+                        MaterialPageRoute(builder: (context) => Services()),
                       );
                     },
                     child: Column(

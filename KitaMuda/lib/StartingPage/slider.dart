@@ -12,7 +12,7 @@ class SliderPage extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 480,
+          height: 400,
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -22,30 +22,32 @@ class SliderPage extends StatelessWidget {
           ),
         ),
         Container(
+          margin: EdgeInsets.symmetric(horizontal: 33),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: 52,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100),
-                child: Center(
-                  child: Text(
-                    title!,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+              Text(
+                title!,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 9,
               ),
               Text(
                 description!,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
               )
             ],
           ),
