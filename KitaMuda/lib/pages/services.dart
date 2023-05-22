@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitamuda/model/servicesData.dart';
 import 'package:kitamuda/services/details/corporateCalendar.dart';
+import 'package:kitamuda/globacls.dart' as globals;
 
-class Services extends StatefulWidget {
-  const Services({Key? key}) : super(key: key);
+class ServicesPage extends StatefulWidget {
+  const ServicesPage({Key? key}) : super(key: key);
 
   @override
-  State<Services> createState() => _ServicesState();
+  State<ServicesPage> createState() => _ServicesPageState();
 }
 
-class _ServicesState extends State<Services> {
+class _ServicesPageState extends State<ServicesPage> {
   Future<List<servicesData>> getJson() async {
-    Uri url = Uri.parse("http://10.0.2.2:8000/api/services");
+    Uri url = Uri.parse(globals.api_service);
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -96,11 +97,70 @@ class _ServicesState extends State<Services> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    CorporateCalendar()));
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                CorporateCalendar(
+                                                              title: items[
+                                                                      index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .name
+                                                                  .toString(),
+                                                              description: items[
+                                                                      index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .description
+                                                                  .toString(),
+                                                              namaProduk: items[
+                                                                      index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .name
+                                                                  .toString(),
+                                                              detailProduk: items[
+                                                                      index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .details!
+                                                                  .detailProduk
+                                                                  .toString(),
+                                                              category: items[
+                                                                      index1]
+                                                                  .category
+                                                                  .toString(),
+                                                              icon: items[
+                                                                      index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .icon,
+                                                              r: items[index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .iconBackground!
+                                                                  .r,
+                                                              g: items[index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .iconBackground!
+                                                                  .g,
+                                                              b: items[index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .iconBackground!
+                                                                  .b,
+                                                              o: items[index1]
+                                                                  .services![
+                                                                      index2]
+                                                                  .iconBackground!
+                                                                  .o!
+                                                                  .toDouble(),
+                                                            ),
+                                                          ),
+                                                        );
                                                       },
                                                       child: Container(
                                                         margin: EdgeInsets.only(

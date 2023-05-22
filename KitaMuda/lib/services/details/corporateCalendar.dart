@@ -1,16 +1,34 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:kitamuda/services/inquiry/Global_Inquiry.dart';
 import 'package:kitamuda/tataCara.dart';
 
-class CorporateCalendar extends StatefulWidget {
-  const CorporateCalendar({super.key});
+class CorporateCalendar extends StatelessWidget {
+  final String? title;
+  final String? description;
+  final String? namaProduk;
+  final String? category;
+  final String? detailProduk;
+  final String? icon;
+  final int? r;
+  final int? g;
+  final int? b;
+  final double? o;
 
-  @override
-  State<CorporateCalendar> createState() => _CorporateCalendarState();
-}
+  const CorporateCalendar(
+      {this.title,
+      this.description,
+      this.namaProduk,
+      this.detailProduk,
+      this.category,
+      this.icon,
+      this.r,
+      this.g,
+      this.b,
+      this.o});
 
-class _CorporateCalendarState extends State<CorporateCalendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +87,10 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                           padding: EdgeInsets.all(27),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Color.fromRGBO(158, 225, 254, 0.69)),
+                              color: Color.fromRGBO(r!, g!, b!, o!)),
                           child: Icon(
-                            Icons.calendar_month_outlined,
+                            IconData(int.parse(icon!.toString()),
+                                fontFamily: "MaterialIcons"),
                             size: 42,
                           ),
                         ),
@@ -79,7 +98,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                           height: 7,
                         ),
                         Text(
-                          "Corporate calendar",
+                          title!,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w600),
                         ),
@@ -87,7 +106,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                           height: 7,
                         ),
                         Text(
-                          "Jadikan Perusahaanmu Lebih Terjadwal",
+                          description!,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400),
                         )
@@ -110,7 +129,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            "Corporate Calendar",
+                            namaProduk!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -129,7 +148,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Nama Produk:",
+                            "Category:",
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -137,7 +156,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            "Corporation",
+                            category!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -164,7 +183,7 @@ class _CorporateCalendarState extends State<CorporateCalendar> {
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eu aliquam neque, et ultrices nunc. Etiam bibendum dui et lectus viverra volutpat. Ut ut vulputate magna. In blandit posuere interdum. Aliquam et varius ipsum. Nullam lobortis risus ultricies elit pretium semper. Suspendisse scelerisque massa est, quis molestie sapien rhoncus vitae. Nullam scelerisque aliquam quam, ac finibus mauris venenatis ac. Sed pulvinar massa at enim posuere gravida. Fusce nec erat venenatis massa rhoncus egestas. ",
+                            detailProduk!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
