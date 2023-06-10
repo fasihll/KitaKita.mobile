@@ -15,7 +15,6 @@ class _TataCaraState extends State<TataCara> {
     'Kemudian Pilih Layanan yang ingin dipesan',
     'Setelah masuk menu detail klik Pesan Jasa',
     'Isi Semua data Inquiry sesuai kebutuhan pemesanan, Setelah semua data terisi klik pesan sekarang (Pastikan semua data terisi dengan baik dan benar karena akan berpengaruh pada proses peninjauan pesanan oleh admin.',
-    'Setelah pengisian Success Anda akan diberikan Token Khusus untuk memantau pemesanan anda disetujui atau tidak melalui website https://KitaMudaIndonesi.co'
   ];
   final List<String> images = [
     'assets/images/image1.png',
@@ -23,7 +22,6 @@ class _TataCaraState extends State<TataCara> {
     'assets/images/image3.png',
     'assets/images/image4.png',
     'assets/images/image5.png',
-    'assets/images/image6.png',
   ];
 
   @override

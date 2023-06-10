@@ -1,78 +1,237 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:kitamuda/model/servicesData.dart';
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class CorporateCalendar_Inquiry extends StatefulWidget {
-  const CorporateCalendar_Inquiry({super.key});
+  final String? namaLayanan;
+  final String? kategori;
+  const CorporateCalendar_Inquiry({super.key, this.namaLayanan, this.kategori});
 
   @override
   State<CorporateCalendar_Inquiry> createState() =>
-      _CorporateCalendar_InquiryState();
+      _CorporateCalendar_InquiryState(namaLayanan, kategori);
 }
 
 class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
+  final String? namaLayanan;
+  final String? kategori;
   final _formKey = GlobalKey<FormState>();
-  String name = '';
-  String subjek = '';
-  String email = '';
-  String pesan = '';
+  final _nameController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _messageController = TextEditingController();
+
+  // Variable File
+  File purposePick = File("");
+  String purposeName = "";
+  File rfpPick = File("");
+  String rfpName = "";
 
   String _proposalPath = '';
   String _proposalFileName = '';
   String _FRPpath = '';
   String _FRPFileName = '';
 
-  void _proposanFilePick() async {
-    FilePickerResult? proposal = await FilePicker.platform.pickFiles(
+  String name = '';
+  String subjek = '';
+  String email = '';
+  String pesan = '';
+
+  _CorporateCalendar_InquiryState(this.namaLayanan, this.kategori);
+
+  Future pickPurpose() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx'],
+      allowedExtensions: ['pdf'],
     );
 
-    if (proposal != null && proposal.files.single.path != null) {
-      PlatformFile file = proposal.files.first;
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
-
-      File _file = File(proposal.files.single.path!);
+    if (result != null) {
+      purposePick = File(result.files.single.path ?? "");
 
       setState(() {
-        _proposalPath = _file.path;
-        _proposalFileName = file.name;
+        _proposalFileName = result.files.single.name;
+        _proposalPath = purposePick.toString();
       });
     } else {
-      //user cencled the picker
+      showSnackbarCancelAction(context);
     }
   }
 
-  void _FRPFilePick() async {
-    FilePickerResult? FRP = await FilePicker.platform.pickFiles(
+  Future pickRFP() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx'],
+      allowedExtensions: ['pdf'],
     );
 
-    if (FRP != null && FRP.files.single.path != null) {
-      PlatformFile file = FRP.files.first;
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
-
-      File _file = File(FRP.files.single.path!);
+    if (result != null) {
+      rfpPick = File(result.files.single.path ?? "");
 
       setState(() {
-        _FRPpath = _file.path;
-        _FRPFileName = file.name;
+        _FRPFileName = result.files.single.name;
+        _FRPpath = rfpPick.toString();
       });
     } else {
-      //user cencled the picker
+      showSnackbarCancelAction(context);
     }
+  }
+
+  Future sendEmail() async {
+    String username = 'ricoenrique24@gmail.com';
+    String password = 'tcvuilfhjuccyfdv';
+
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(email, name)
+      ..recipients.add('mochammadenrique.25@gmail.com')
+      ..ccRecipients.add(email)
+      ..subject = subjek
+      ..text = pesan
+      ..html = '''
+        <html>
+        <head>
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+          <style>
+            .two-tone {
+              background-color: yellow;
+              color: black;
+              padding: 10px;
+            }
+            body {
+              background-color: white;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="two-tone">
+            <h1 class="display-4">$subjek</h1>
+            <p class="lead">$pesan</p>
+          </div>
+        </body>
+      </html>
+      '''
+      ..attachments = [
+        FileAttachment(purposePick)
+          ..location = Location.attachment
+          ..fileName = "Proposal_$name _$_proposalFileName",
+        FileAttachment(rfpPick)
+          ..location = Location.attachment
+          ..fileName = "RFP_$name _$_FRPFileName",
+      ];
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: $sendReport');
+
+      showAlertDialog(context);
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+  }
+
+  Future hashTransaction() async {
+    print('Client Choose $namaLayanan Service in $kategori Category');
+
+    final apiConfig api = apiConfig();
+    api.submitTransaction(
+      name            : name,
+      subject         : subjek,
+      frp             : rfpPick,
+      frpName         : _FRPFileName,
+      proposal        : purposePick,
+      proposalName    : _proposalFileName,
+      email           : email,
+      serviceName     : namaLayanan,
+      serviceCategory : kategori
+    );
+  }
+
+  clearContent() {
+    // Menghapus nilai dari controller
+    _nameController.clear();
+    _subjectController.clear();
+    _emailController.clear();
+    _messageController.clear();
+    purposePick = File("");
+    rfpPick = File("");
+
+    setState(() {
+      purposeName = "";
+      rfpName = "";
+      _FRPpath = "";
+      _proposalPath = "";
+    });
+  }
+
+  showSnackbarEmailSuccessful(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Email Berhasil Terkirim!'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  showSnackbarCancelAction(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Anda Membatalkan upload Dokumen!'),
+      ),
+    );
+  }
+
+  showSnackbarLoading(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green[300],
+        content: const Text('Mohon Tunggu, Email Anda Sedang dikirim...'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // Aksi saat tombol ditekan
+          },
+        ),
+      ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget doneButton = ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context);
+        // Aksi saat tombol ditekan (kirim ke homepage)
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+      },
+      child: Text('Done'),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Selamat!"),
+      content: Text(
+          "Pesan Email Telah terkirim. Silahkan tinjau email secara berkala."),
+      actions: [doneButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -134,6 +293,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                       height: 11,
                     ),
                     TextFormField(
+                      controller: _nameController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(14),
                         hintText: "Masukkan nama pemesan",
@@ -167,6 +327,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                       height: 11,
                     ),
                     TextFormField(
+                      controller: _subjectController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(14),
                         hintText: "Subject",
@@ -200,6 +361,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                       height: 11,
                     ),
                     TextFormField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(14),
                         hintText: "Masukkan email anda",
@@ -233,6 +395,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                       height: 11,
                     ),
                     TextFormField(
+                      controller: _messageController,
                       maxLines: 4,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(14),
@@ -273,7 +436,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: _proposanFilePick,
+                          onPressed: pickPurpose,
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(126, 255, 204, 0),
                               elevation: 0,
@@ -322,7 +485,7 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: _FRPFilePick,
+                          onPressed: pickRFP,
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(126, 255, 204, 0),
                               elevation: 0,
@@ -357,16 +520,9 @@ class _CorporateCalendar_InquiryState extends State<CorporateCalendar_Inquiry> {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              final message =
-                                  'Name: $name, Subjek: $subjek, Email: $email, Pesan: $pesan,ProposanName: $_proposalFileName, ProposalFilePath: $_proposalPath,FPRName: $_FRPFileName FRPFilePath: $_FRPpath';
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(message),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            }
+                            showSnackbarLoading(context);
+                            sendEmail();
+                            hashTransaction();
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xffFFCE00),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
@@ -23,14 +23,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController searchController = TextEditingController();
 
-  Future<List<servicesData>> getJson() async {
-    Uri url = Uri.parse(globals.api_service);
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
-    } else {
-      throw Exception('Unexpected error occured!');
+  Future<List<servicesData>?> getJson() async {
+    try {
+      Uri url = Uri.parse(globals.api_service);
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
+      } else {
+        throw Exception('Unexpected error occured!');
+      }
+    } catch (e) {
+      print("error message : $e");
+      return null;
     }
   }
 
@@ -143,11 +148,59 @@ class _HomePageState extends State<HomePage> {
               child: PageView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  Jasa(),
-                  Jasa(),
-                  Jasa(),
-                  Jasa(),
-                  Jasa(),
+                  FutureBuilder<List<servicesData>?>(
+                    future: getJson(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // Ketika sedang dalam proses mengambil data
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        // Ketika terjadi error dalam mengambil data
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        if (snapshot.hasData) {
+                          // Ketika data telah berhasil diambil
+                          List<servicesData>? data = snapshot.data;
+                          Random r = Random();
+                          int rNumber = r.nextInt(3);
+                          if (data != null && data.isNotEmpty) {
+                            return Container(
+                              height: 200,
+                              child: PageView(
+                                scrollDirection: Axis.horizontal,
+                                children: data[rNumber].services?.map((service) {
+                                      print(service.description);
+                                      String description2 =
+                                          service.description ?? "";
+                                      if (description2.length > 20) {
+                                        // Mengatur \n setelah 20 karakter
+                                        description2 =
+                                            description2.substring(0, 20) +
+                                                "\n" +
+                                            description2.substring(20);
+
+                                        print("after convert: $description2");
+                                      }
+
+                                      return Jasa(
+                                        namaProduk: service.name ?? "",
+                                        description: description2,
+                                      );
+                                    }).toList() ??
+                                    [],
+                              ),
+                            );
+                          } else {
+                            // Ketika data kosong
+                            return Text('No data available');
+                          }
+                        } else {
+                          // Ketika tidak ada data
+                          return Text('No data available');
+                        }
+                      }
+                    },
+                  )
                 ],
               ),
             ),

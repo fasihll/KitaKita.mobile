@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 class servicesData {
   String? category;
   List<Services>? services;
@@ -108,5 +111,110 @@ class Details {
     data['category'] = this.category;
     data['detail_produk'] = this.detailProduk;
     return data;
+  }
+}
+
+class apiConfig {
+  Future<void> submitTransaction(
+      {
+        String? name,
+        String? subject,
+        File? frp,
+        String? frpName,
+        File? proposal,
+        String? proposalName,
+        String? email,
+        String? serviceName,
+        String? serviceCategory
+      }) async {
+
+      try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("https://research-of-duren.000webhostapp.com/api.php"),
+      );
+
+      final Map<String, String> headers = {
+        'Content-type': 'multipart/form-data'
+      };
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'proposal',
+          proposal!.path,
+          filename: proposalName,
+        ),
+      );
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'frp',
+          frp!.path,
+          filename: frpName,
+        ),
+      );
+
+      request.headers.addAll(headers);
+      request.fields.addAll({
+        'name'        : name!,
+        'subject'     : subject!,
+        'email'       : email!,
+        'serviceName' : serviceName!,
+        'serviceCat'  : serviceCategory!
+      });
+
+      print("Requesting to server: $request");
+      var res = await request.send();
+      int resCode = res.statusCode;
+      print('This is response from server: $res');
+      print('and This is Response code: $resCode');
+    } catch (e) {
+      print("We have an error in : $e");
+    }
+
+
+    // var dio = Dio();
+    // var formData = FormData();
+
+    // formData.files.add(
+    //   MapEntry(
+    //     'file',
+    //     await MultipartFile.fromFile(
+    //       proposal!.path,
+    //       filename: proposalName,
+    //     ),
+    //   ),
+    // );
+
+    // formData.files.add(
+    //   MapEntry(
+    //     'file',
+    //     await MultipartFile.fromFile(
+    //       frp!.path,
+    //       filename: frpName,
+    //     ),
+    //   ),
+    // );
+
+    // // Menambahkan data tambahan
+    // formData.fields.addAll([
+    //   MapEntry('name', nama!),
+    //   MapEntry('email', email!),
+    //   MapEntry('serviceCategory', 'Annual Report'),
+    //   MapEntry('serviceName', 'Report Management'),
+    //   MapEntry('status', 'Menunggu Konfirmasi'),
+    // ]);
+
+    // try {
+    //   var response = await dio.post(
+    //     'https://research-of-duren.000webhostapp.com/api.php',
+    //     data: formData,
+    //   );
+
+    //   print('Response   : ${response.data}');
+    //   print('Status Code: ${response.statusCode}');
+    // } catch (error) {
+    //   print('Error: $error');
+    // }
   }
 }

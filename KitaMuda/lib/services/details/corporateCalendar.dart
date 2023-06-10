@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:kitamuda/services/inquiry/Global_Inquiry.dart';
@@ -240,7 +238,7 @@ class CorporateCalendar extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                CorporateCalendar_Inquiry()));
+                                CorporateCalendar_Inquiry(namaLayanan: namaProduk, kategori: category,)));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
