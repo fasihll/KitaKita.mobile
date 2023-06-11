@@ -86,7 +86,7 @@ class _ServicesPageState extends State<ServicesPage> {
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
                                               itemCount:
-                                                  items![index1].services !=
+                                                  items[index1].services !=
                                                           null
                                                       ? items[index1]
                                                           .services!
@@ -227,7 +227,7 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                         .start,
                                                                 children: [
                                                                   Text(
-                                                                    items![index1]
+                                                                    items[index1]
                                                                         .services![
                                                                             index2]
                                                                         .name
@@ -239,7 +239,7 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                             FontWeight.w600),
                                                                   ),
                                                                   Text(
-                                                                    items![index1]
+                                                                    items[index1]
                                                                         .services![
                                                                             index2]
                                                                         .description

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kitamuda/globacls.dart' as globals;
 
 class Jasa extends StatelessWidget {
   final String? namaProduk;
   final String? description;
+  final String? gambar;
 
-  const Jasa({Key? key, this.namaProduk, this.description}) : super(key: key);
+  const Jasa({Key? key, this.namaProduk, this.description, this.gambar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class Jasa extends StatelessWidget {
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/starting_banner.png'),
+            image: NetworkImage(globals.api_images+gambar!),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(12),

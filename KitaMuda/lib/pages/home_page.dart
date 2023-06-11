@@ -26,12 +26,12 @@ class _HomePageState extends State<HomePage> {
   Future<List<servicesData>?> getJson() async {
     try {
       Uri url = Uri.parse(globals.api_service);
-      final response = await http.get(url);
+      final response = await http.get(url, headers: globals.headers);
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse = jsonDecode(response.body);
         return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
       } else {
-        throw Exception('Unexpected error occured!');
+        throw Exception('Unexpected error occurred!');
       }
     } catch (e) {
       print("error message : $e");
@@ -152,14 +152,11 @@ class _HomePageState extends State<HomePage> {
                     future: getJson(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        // Ketika sedang dalam proses mengambil data
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        // Ketika terjadi error dalam mengambil data
                         return Text('Error: ${snapshot.error}');
                       } else {
                         if (snapshot.hasData) {
-                          // Ketika data telah berhasil diambil
                           List<servicesData>? data = snapshot.data;
                           Random r = Random();
                           int rNumber = r.nextInt(3);
@@ -168,34 +165,61 @@ class _HomePageState extends State<HomePage> {
                               height: 200,
                               child: PageView(
                                 scrollDirection: Axis.horizontal,
-                                children: data[rNumber].services?.map((service) {
-                                      print(service.description);
+                                children: data[rNumber]
+                                        .services
+                                        ?.map((service) {
                                       String description2 =
                                           service.description ?? "";
+                                      String images = "image-default.png"; // service.image ?? ""
+
                                       if (description2.length > 20) {
-                                        // Mengatur \n setelah 20 karakter
                                         description2 =
                                             description2.substring(0, 20) +
                                                 "\n" +
-                                            description2.substring(20);
-
-                                        print("after convert: $description2");
+                                                description2.substring(20);
                                       }
 
-                                      return Jasa(
-                                        namaProduk: service.name ?? "",
-                                        description: description2,
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  CorporateCalendar(
+                                                title: service.name.toString(),
+                                                description: service.description
+                                                    .toString(),
+                                                namaProduk:
+                                                    service.name.toString(),
+                                                detailProduk: service
+                                                    .details?.detailProduk
+                                                    .toString(),
+                                                category: data[rNumber]
+                                                    .category
+                                                    .toString(),
+                                                icon: service.icon,
+                                                r: service.iconBackground!.r,
+                                                g: service.iconBackground!.g,
+                                                b: service.iconBackground!.b,
+                                                o: service.iconBackground!.o!
+                                                    .toDouble(),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Jasa(
+                                          namaProduk: service.name ?? "",
+                                          description: description2,
+                                          gambar: images,
+                                        ),
                                       );
                                     }).toList() ??
                                     [],
                               ),
                             );
                           } else {
-                            // Ketika data kosong
                             return Text('No data available');
                           }
                         } else {
-                          // Ketika tidak ada data
                           return Text('No data available');
                         }
                       }
@@ -402,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                                                                         .start,
                                                                 children: [
                                                                   Text(
-                                                                    items![index1]
+                                                                    items[index1]
                                                                         .services![
                                                                             index2]
                                                                         .name
@@ -414,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                                                                             FontWeight.w600),
                                                                   ),
                                                                   Text(
-                                                                    items![index1]
+                                                                    items[index1]
                                                                         .services![
                                                                             index2]
                                                                         .description

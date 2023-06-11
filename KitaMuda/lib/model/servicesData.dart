@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:kitamuda/globacls.dart' as globals;
 
 class servicesData {
   String? category;
@@ -28,6 +29,8 @@ class servicesData {
 }
 
 class Services {
+  String? serviceId;
+  String? image;
   String? name;
   String? description;
   String? icon;
@@ -35,13 +38,17 @@ class Services {
   Details? details;
 
   Services(
-      {this.name,
+      {this.serviceId,
+      this.image,
+      this.name,
       this.description,
       this.icon,
       this.iconBackground,
       this.details});
 
   Services.fromJson(Map<String, dynamic> json) {
+    serviceId = json['serviceId'];
+    image = json['image'];
     name = json['name'];
     description = json['description'];
     icon = json['icon'];
@@ -54,6 +61,8 @@ class Services {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['serviceId'] = this.serviceId;
+    data['image'] = this.image;
     data['name'] = this.name;
     data['description'] = this.description;
     data['icon'] = this.icon;
@@ -131,11 +140,12 @@ class apiConfig {
       try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse("https://research-of-duren.000webhostapp.com/api.php"),
+        Uri.parse(globals.api_service),
       );
 
       final Map<String, String> headers = {
-        'Content-type': 'multipart/form-data'
+        'Authorization' : 'kitamudaindonesia',
+        'Content-type'  : 'multipart/form-data'
       };
 
       request.files.add(
