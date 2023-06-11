@@ -13,14 +13,19 @@ class ServicesPage extends StatefulWidget {
 }
 
 class _ServicesPageState extends State<ServicesPage> {
-  Future<List<servicesData>> getJson() async {
-    Uri url = Uri.parse(globals.api_service);
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
-    } else {
-      throw Exception('Unexpected error occured!');
+   Future<List<servicesData>?> getJson() async {
+    try {
+      Uri url = Uri.parse(globals.api_service);
+      final response = await http.get(url, headers: globals.headers);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
+      } else {
+        throw Exception('Unexpected error occurred!');
+      }
+    } catch (e) {
+      print("error message : $e");
+      return null;
     }
   }
 
