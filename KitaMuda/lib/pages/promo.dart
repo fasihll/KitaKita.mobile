@@ -12,12 +12,19 @@ class _PromoState extends State<Promo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Promo Page'),
+        centerTitle: true,
+        title: Text(
+          "Promo",
+          style: TextStyle(
+              color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Center(
           child: Text(
-            'Promo Page',
+            'Tidak Ada Promo yang Tersedia',
             style: TextStyle(fontSize: 24),
           ),
         ),

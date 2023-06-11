@@ -1,237 +1,47 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart';
-import 'package:kitamuda/model/servicesData.dart';
-import 'package:kitamuda/pages/about.dart';
-import 'package:kitamuda/pages/blank.dart';
-import 'package:kitamuda/pages/promo.dart';
-import 'package:kitamuda/pages/services.dart';
-import 'package:kitamuda/services/details/corporateCalendar.dart';
-import 'package:kitamuda/util/jasa.dart';
 import 'package:http/http.dart' as http;
+import 'package:kitamuda/model/servicesData.dart';
+import 'package:kitamuda/services/details/corporateCalendar.dart';
 import 'package:kitamuda/globacls.dart' as globals;
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class ServicesPage extends StatefulWidget {
+  const ServicesPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ServicesPage> createState() => _ServicesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  TextEditingController searchController = TextEditingController();
-
-  Future<List<servicesData>?> getJson() async {
-    try {
-      Uri url = Uri.parse(globals.api_service);
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse = jsonDecode(response.body);
-        return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
-      } else {
-        throw Exception('Unexpected error occured!');
-      }
-    } catch (e) {
-      print("error message : $e");
-      return null;
+class _ServicesPageState extends State<ServicesPage> {
+  Future<List<servicesData>> getJson() async {
+    Uri url = Uri.parse(globals.api_service);
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
+    } else {
+      throw Exception('Unexpected error occured!');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //Title
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 185,
-                  decoration: BoxDecoration(
-                    color: Color(0xffFFCE00),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30)),
-                  ),
-                ),
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 48,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Selamat Datang Di\nKita Muda Indonesia',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Jadikan Usahamu Lebih Professional',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 45,
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            prefixIcon: Icon(Icons.search),
-                            hintText: 'Mau cari jasa apa nih?',
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(18)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xff908D8D),
-                              ),
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Jadikan perusahaanmu lebih baik',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Pakai Kita Muda Indonesia untuk jadikan perusahaan anda lebih professional, Yuk Gunakan ....',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              height: 200,
-              child: PageView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  FutureBuilder<List<servicesData>?>(
-                    future: getJson(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        // Ketika sedang dalam proses mengambil data
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        // Ketika terjadi error dalam mengambil data
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        if (snapshot.hasData) {
-                          // Ketika data telah berhasil diambil
-                          List<servicesData>? data = snapshot.data;
-                          Random r = Random();
-                          int rNumber = r.nextInt(3);
-                          if (data != null && data.isNotEmpty) {
-                            return Container(
-                              height: 200,
-                              child: PageView(
-                                scrollDirection: Axis.horizontal,
-                                children: data[rNumber].services?.map((service) {
-                                      print(service.description);
-                                      String description2 =
-                                          service.description ?? "";
-                                      if (description2.length > 20) {
-                                        // Mengatur \n setelah 20 karakter
-                                        description2 =
-                                            description2.substring(0, 20) +
-                                                "\n" +
-                                            description2.substring(20);
-
-                                        print("after convert: $description2");
-                                      }
-
-                                      return Jasa(
-                                        namaProduk: service.name ?? "",
-                                        description: description2,
-                                      );
-                                    }).toList() ??
-                                    [],
-                              ),
-                            );
-                          } else {
-                            // Ketika data kosong
-                            return Text('No data available');
-                          }
-                        } else {
-                          // Ketika tidak ada data
-                          return Text('No data available');
-                        }
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Semua Jasa Kami',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Semua Jasa yang kami berikan untuk Anda',
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Column(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Our Service",
+            style: TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 33),
+          child: SingleChildScrollView(
+            physics: ScrollPhysics(),
+            child: Column(
               children: [
                 FutureBuilder(
                   future: getJson(),
@@ -239,25 +49,31 @@ class _HomePageState extends State<HomePage> {
                     var items = snapshot.data;
                     if (snapshot.hasData) {
                       return Container(
-                        margin: EdgeInsets.only(top: 0, left: 33, right: 33),
                         child: ListView.builder(
-                            padding: EdgeInsets.zero,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
-                            itemCount: items != null ? 1 : 0,
+                            itemCount: items != null ? items.length : 0,
                             itemBuilder: (context, index1) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text(
+                                    items![index1].category.toString(),
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 24,
+                                  ),
                                   FutureBuilder(
                                     future: getJson(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         return Container(
                                           child: ListView.builder(
-                                              padding: EdgeInsets.zero,
                                               physics:
                                                   NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
@@ -265,7 +81,9 @@ class _HomePageState extends State<HomePage> {
                                               itemCount:
                                                   items![index1].services !=
                                                           null
-                                                      ? 3
+                                                      ? items[index1]
+                                                          .services!
+                                                          .length
                                                       : 0,
                                               itemBuilder: (context, index2) {
                                                 return Column(
@@ -456,72 +274,6 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     },
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Blank()));
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(9),
-                                          decoration: BoxDecoration(
-                                              color: Color.fromRGBO(
-                                                  0, 102, 255, 0.38),
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Icon(
-                                            Icons.more_horiz_outlined,
-                                            size: 30,
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ServicesPage()));
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'More Service',
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'Klik untuk melihat semua jasa yang kami berikan',
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 11),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ],
                               );
                             }),
@@ -536,9 +288,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
