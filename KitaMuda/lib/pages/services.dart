@@ -13,14 +13,21 @@ class ServicesPage extends StatefulWidget {
 }
 
 class _ServicesPageState extends State<ServicesPage> {
-  Future<List<servicesData>> getJson() async {
-    Uri url = Uri.parse(globals.api_service);
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
-    } else {
-      throw Exception('Unexpected error occured!');
+
+   Future<List<servicesData>?> getJson() async {
+    try {
+      Uri url = Uri.parse(globals.api_service);
+      final response = await http.get(url, headers: globals.headers);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse.map((data) => servicesData.fromJson(data)).toList();
+      } else {
+        throw Exception('Unexpected error occurred!');
+      }
+    } catch (e) {
+      print("error message : $e");
+      return null;
+
     }
   }
 
@@ -28,6 +35,15 @@ class _ServicesPageState extends State<ServicesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+
+          leading: GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 26,
+                color: Colors.black,
+              )),
+
           centerTitle: true,
           title: Text(
             "Our Service",
@@ -79,7 +95,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
                                               itemCount:
-                                                  items![index1].services !=
+
+                                                  items[index1].services !=
+
                                                           null
                                                       ? items[index1]
                                                           .services!
@@ -220,7 +238,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                         .start,
                                                                 children: [
                                                                   Text(
-                                                                    items![index1]
+
+                                                                    items[index1]
+
                                                                         .services![
                                                                             index2]
                                                                         .name
@@ -232,7 +252,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                             FontWeight.w600),
                                                                   ),
                                                                   Text(
-                                                                    items![index1]
+
+                                                                    items[index1]
+
                                                                         .services![
                                                                             index2]
                                                                         .description

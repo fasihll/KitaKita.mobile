@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kitamuda/StartingPage/starting_page.dart';
+
 import 'package:kitamuda/pages/botNavBar.dart';
+
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +30,9 @@ class _MainAppState extends State<MainApp> {
         future: getSP(),
         builder: (context, AsyncSnapshot<int?> snapshot) {
           if (snapshot.data == 1) {
+
             return MenuBawah();
+
           } else {
             return StartingPage();
           }
