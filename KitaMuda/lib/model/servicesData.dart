@@ -88,7 +88,7 @@ class IconBackground {
     r = json['r'];
     g = json['g'];
     b = json['b'];
-    o = json['o'];
+    o = json['o']?.toDouble();
   }
 
   Map<String, dynamic> toJson() {
