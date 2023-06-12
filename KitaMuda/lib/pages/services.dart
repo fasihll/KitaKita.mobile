@@ -13,6 +13,7 @@ class ServicesPage extends StatefulWidget {
 }
 
 class _ServicesPageState extends State<ServicesPage> {
+
    Future<List<servicesData>?> getJson() async {
     try {
       Uri url = Uri.parse(globals.api_service);
@@ -26,6 +27,7 @@ class _ServicesPageState extends State<ServicesPage> {
     } catch (e) {
       print("error message : $e");
       return null;
+
     }
   }
 
@@ -33,6 +35,7 @@ class _ServicesPageState extends State<ServicesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+
           leading: GestureDetector(
               onTap: () => Navigator.of(context).pop(),
               child: Icon(
@@ -40,6 +43,7 @@ class _ServicesPageState extends State<ServicesPage> {
                 size: 26,
                 color: Colors.black,
               )),
+
           centerTitle: true,
           title: Text(
             "Our Service",
@@ -91,7 +95,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
                                               itemCount:
+
                                                   items[index1].services !=
+
                                                           null
                                                       ? items[index1]
                                                           .services!
@@ -232,7 +238,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                         .start,
                                                                 children: [
                                                                   Text(
+
                                                                     items[index1]
+
                                                                         .services![
                                                                             index2]
                                                                         .name
@@ -244,7 +252,9 @@ class _ServicesPageState extends State<ServicesPage> {
                                                                             FontWeight.w600),
                                                                   ),
                                                                   Text(
+
                                                                     items[index1]
+
                                                                         .services![
                                                                             index2]
                                                                         .description

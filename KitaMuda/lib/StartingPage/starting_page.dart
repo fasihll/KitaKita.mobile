@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kitamuda/StartingPage/slider.dart';
+
+import 'package:kitamuda/pages/botNavBar.dart';
+
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,7 +107,9 @@ class _StartingPageState extends State<StartingPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+
+                                  builder: (context) => MenuBawah()));
+
                         }
                       : () {
                           _controller.nextPage(

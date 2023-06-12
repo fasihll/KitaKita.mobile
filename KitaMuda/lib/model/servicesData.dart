@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
+
 import 'package:kitamuda/globacls.dart' as globals;
+
 
 class servicesData {
   String? category;
@@ -29,8 +31,10 @@ class servicesData {
 }
 
 class Services {
+
   String? serviceId;
   String? image;
+
   String? name;
   String? description;
   String? icon;
@@ -38,6 +42,7 @@ class Services {
   Details? details;
 
   Services(
+
       {this.serviceId,
       this.image,
       this.name,
@@ -47,8 +52,10 @@ class Services {
       this.details});
 
   Services.fromJson(Map<String, dynamic> json) {
+
     serviceId = json['serviceId'];
     image = json['image'];
+
     name = json['name'];
     description = json['description'];
     icon = json['icon'];
@@ -61,6 +68,7 @@ class Services {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+
     data['serviceId'] = this.serviceId;
     data['image'] = this.image;
     data['name'] = this.name;

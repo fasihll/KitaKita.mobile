@@ -5,9 +5,11 @@ import 'package:kitamuda/globacls.dart' as globals;
 class Jasa extends StatelessWidget {
   final String? namaProduk;
   final String? description;
+
   final String? gambar;
 
   const Jasa({Key? key, this.namaProduk, this.description, this.gambar}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
