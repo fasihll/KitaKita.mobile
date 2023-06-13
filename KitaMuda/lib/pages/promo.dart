@@ -25,6 +25,7 @@ class _PromoState extends State<Promo> {
         child: Center(
           child: Text(
             'Tidak Ada Promo yang Tersedia',
+            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 24),
           ),
         ),

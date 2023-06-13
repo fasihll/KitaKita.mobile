@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kitamuda/pages/home_page.dart';
 import 'package:kitamuda/services/inquiry/Global_Inquiry.dart';
 import 'package:kitamuda/tataCara.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:flutter_html/flutter_html.dart';
 
 class CorporateCalendar extends StatelessWidget {
   final String? title;
@@ -180,13 +182,8 @@ class CorporateCalendar extends StatelessWidget {
                             ),
                             textAlign: TextAlign.start,
                           ),
-                          Text(
-                            detailProduk!,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.justify,
+                          Html(
+                            data: detailProduk!,
                           ),
                         ],
                       ),
@@ -238,7 +235,10 @@ class CorporateCalendar extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                CorporateCalendar_Inquiry(namaLayanan: namaProduk, kategori: category,)));
+                                CorporateCalendar_Inquiry(
+                                  namaLayanan: namaProduk,
+                                  kategori: category,
+                                )));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
